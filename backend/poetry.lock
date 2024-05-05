@@ -612,6 +612,21 @@ pluggy = ">=1.4,<2.0"
 testing = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-cov"
+version = "5.0.0"
+description = "Pytest plugin for measuring coverage."
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+coverage = {version = ">=5.2.1", extras = ["toml"]}
+pytest = ">=4.6"
+
+[package.extras]
+testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
+
+[[package]]
 name = "pytest-pudb"
 version = "0.7.0"
 description = "Pytest PuDB debugger integration"
@@ -845,7 +860,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.11"
-content-hash = "429f3d40157b5258af714163fa2b986dde9fb0e09f08851ed354f86473cdf91a"
+content-hash = "9114f56965b419454c9a863b811c08330874e4b59cd45d12581b8453f2bc35c2"
 
 [metadata.files]
 aiosqlite = []
@@ -896,6 +911,7 @@ pydantic-core = []
 pydantic-settings = []
 pygments = []
 pytest = []
+pytest-cov = []
 pytest-pudb = [
     {file = "pytest-pudb-0.7.0.tar.gz", hash = "sha256:0ea87316d39c82163d340c28a168e08a163b8d3f484e60a53c9fd5eefe432c63"},
     {file = "pytest_pudb-0.7.0-py2.py3-none-any.whl", hash = "sha256:21e96fc16f313a7bd75e1df1b151de8a721144318b0ae8350208d6554222005a"},
