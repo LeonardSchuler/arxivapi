@@ -1,0 +1,58 @@
+version: '3'
+
+volumes:
+  base-data:
+  db-data:
+  webserver-data:
+
+services:
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - '${DB_PORT}:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DB}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+
+  backend:
+    restart: always
+    env_file:
+      - .env
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+      args:
+        env: ${ENV}
+    ports:
+      - "8666:8000"
+    command: |
+        bash -c "
+        while !</dev/tcp/db/5432; do sleep 1; done;
+        gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --log-level=debug --timeout=60 --reload"
+    depends_on:
+      - db
+    environment:
+      - PYTHONUNBUFFERED=0
+    volumes:
+      - base-data:/data
+      - ./backend/:/code
+
+  webserver:
+    restart: always
+    ports:
+      - "0.0.0.0:80:80"
+    env_file:
+      - .env
+    build:
+      context: ./webserver
+      dockerfile: ./Dockerfile
+    volumes:
+        - webserver-data:/etc/letsencrypt
