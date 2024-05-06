@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -79,3 +81,13 @@ class ArxivDatabase:
 
         self._session.add(db_article)
         return db_article
+
+    async def get_queries_between(
+        self, start: datetime.datetime, end: None | datetime.datetime = None
+    ) -> list[Query]:
+        statement = select(Query).where(Query.timestamp >= start)
+        if end:
+            statement = statement.where(Query.timestamp <= end)
+        results = await self._session.exec(statement)
+        queries = results.all()
+        return queries

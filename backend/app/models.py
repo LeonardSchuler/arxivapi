@@ -70,3 +70,7 @@ class Author(AuthorBase, table=True):
     coauthor_articles: list[Article] = Relationship(
         back_populates="coauthors", link_model=CoauthorArticleLink
     )
+
+
+class QueryWithSearchResult(QueryBase):
+    timestamp: datetime.datetime
