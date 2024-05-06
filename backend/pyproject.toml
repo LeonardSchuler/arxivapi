@@ -85,7 +85,7 @@ lint.ignore = [
 "__init__.py" = ["F401"]
 
 [tool.codespell]
-ignore-words-list = 'selectin,'
+ignore-words-list = 'selectin'
 
 [tool.coverage.report]
 fail_under = 55

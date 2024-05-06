@@ -1,4 +1,5 @@
 import datetime
+import math
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -91,3 +92,20 @@ class ArxivDatabase:
         results = await self._session.exec(statement)
         queries = results.all()
         return queries
+
+    async def get_paginated_articles_of(
+        self, query_id: int, page: int, items_per_page: int
+    ) -> list[Article]:
+        query_statement = select(Query).where(Query.id == query_id)
+        results = await self._session.exec(query_statement)
+        query = results.first()
+        if query is None:
+            return []
+        num_pages = math.ceil(query.num_results / items_per_page)
+        if page > num_pages:
+            return []
+        start_index = (page - 1) * items_per_page
+        end_index = page * items_per_page
+        paginated_articles = query.articles[start_index:end_index]
+        # paginated_articles = [await query.articles[0]]
+        return paginated_articles

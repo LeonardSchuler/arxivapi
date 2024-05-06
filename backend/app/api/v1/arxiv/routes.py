@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get("/search", response_model=QueryCreate)
-async def search(
+async def get_articles_from_arxiv(
     arxiv: Annotated[ArxivApi, Depends(get_arxiv)],
     session: Annotated[AsyncSession, Depends(get_session)],
     author: str = "",

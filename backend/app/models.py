@@ -52,7 +52,11 @@ class Query(QueryBase, table=True):
             nullable=False,
         )
     )
-    articles: list["Article"] = Relationship(back_populates="queries", link_model=QueryArticleLink)
+    articles: list["Article"] = Relationship(
+        back_populates="queries",
+        link_model=QueryArticleLink,
+        sa_relationship_kwargs={"lazy": "selectin"},  # required for async to work
+    )
 
 
 class Article(ArticleBase, table=True):
@@ -72,5 +76,11 @@ class Author(AuthorBase, table=True):
     )
 
 
-class QueryWithSearchResult(QueryBase):
+class QueryWithSearchResultAndTimestamp(QueryBase):
     timestamp: datetime.datetime
+
+
+class ArticleTitleAuthorJournal(SQLModel):
+    title: str
+    author: str
+    journal: str

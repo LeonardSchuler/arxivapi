@@ -62,6 +62,7 @@ class ArxivApi:
         sort_by: str = "relevance",
         sort_order: str = "descending",
     ) -> httpx.Response:
+        # TODO: Implement paging + 3s wait to reduce the load on arxiv
         path = PATH_TEMPLATE.format(
             query=query, skip=skip, max_results=max_results, sort_by=sort_by, sort_order=sort_order
         )
